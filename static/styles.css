@@ -1,0 +1,169 @@
+:root {
+  --bg: #0f1419;
+  --surface: #1a2332;
+  --border: #2d3a4f;
+  --text: #e8edf4;
+  --muted: #8b9cb3;
+  --accent: #00a896;
+  --danger: #e74c3c;
+  --warn: #f39c12;
+  --ok: #27ae60;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2rem;
+  background: linear-gradient(135deg, #1a2332 0%, #0d3d38 100%);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo { display: flex; align-items: center; gap: 1rem; }
+.logo-icon { font-size: 2rem; }
+.header h1 { font-size: 1.35rem; font-weight: 600; }
+.subtitle { color: var(--muted); font-size: 0.85rem; }
+
+.status-badge {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.status-badge.ok { background: rgba(39, 174, 96, 0.2); color: var(--ok); }
+.status-badge.demo { background: rgba(243, 156, 18, 0.2); color: var(--warn); }
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.panel h2 { font-size: 1.1rem; margin-bottom: 0.75rem; }
+.hint { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.75rem; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chip {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+.chip:hover { border-color: var(--accent); background: rgba(0, 168, 150, 0.1); }
+.chip.warn { border-color: var(--danger); }
+
+.loading {
+  margin-top: 1rem;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+.loading.hidden { display: none; }
+
+.count {
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  margin-left: 0.35rem;
+}
+
+.alerta {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-left: 4px solid var(--muted);
+}
+.alerta.riesgo-bajo { border-left-color: var(--ok); }
+.alerta.riesgo-medio { border-left-color: var(--warn); }
+.alerta.riesgo-alto, .alerta.riesgo-critico { border-left-color: var(--danger); }
+
+.alerta header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  flex-wrap: wrap;
+}
+.alerta-id { font-family: monospace; font-size: 0.75rem; color: var(--muted); }
+.triage {
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.badge {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.badge.vigente { background: rgba(39, 174, 96, 0.25); color: var(--ok); }
+.badge.vencida, .badge.suspendida { background: rgba(231, 76, 60, 0.25); color: var(--danger); }
+.badge.no_encontrada { background: rgba(139, 156, 179, 0.25); color: var(--muted); }
+
+.alerta h3 { font-size: 1rem; }
+.meta, .motivo { font-size: 0.85rem; color: var(--muted); }
+.resumen { margin: 0.5rem 0; font-size: 0.9rem; }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 0.75rem 0;
+  font-size: 0.85rem;
+}
+@media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+.grid-2 h4 { font-size: 0.75rem; color: var(--accent); margin-bottom: 0.25rem; }
+.grid-2 ul { padding-left: 1.1rem; color: var(--muted); }
+
+.alerta footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+.notif { color: var(--accent); }
+
+.empty { color: var(--muted); font-style: italic; }
+
+.docs pre {
+  background: var(--bg);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+}
+.docs code { color: #7fdbda; }

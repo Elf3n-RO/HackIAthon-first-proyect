@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es-EC">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alerta Temprana — Emergencias Ecuador</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">⚕</span>
+      <div>
+        <h1>Alerta Temprana de Emergencias</h1>
+        <p class="subtitle">Ecuador · Validación IA de pólizas y preexistencias</p>
+      </div>
+    </div>
+    <div class="status-badge {{ 'ok' if ia_configurada else 'demo' }}">
+      IA: {{ modelo if ia_configurada else 'Motor local (demo)' }}
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel simular">
+      <h2>Simular ingreso (webhook)</h2>
+      <p class="hint">Pacientes demo con póliza en base de datos:</p>
+      <div class="chips">
+        <button type="button" data-cedula="1712345678" class="chip">1712345678 — Vigente</button>
+        <button type="button" data-cedula="1723456789" class="chip">1723456789 — Vigente</button>
+        <button type="button" data-cedula="1709876543" class="chip">1709876543 — Vencida</button>
+        <button type="button" data-cedula="1756789012" class="chip">1756789012 — Suspendida</button>
+        <button type="button" data-cedula="9999999999" class="chip warn">9999999999 — Sin póliza</button>
+      </div>
+      <div id="loading" class="loading hidden">Analizando con IA y enviando notificaciones…</div>
+    </section>
+
+    <section class="panel">
+      <h2>Alertas recientes <span id="count" class="count">{{ alertas|length }}</span></h2>
+      <div id="alertas-list">
+        {% for a in alertas %}
+        <article class="alerta riesgo-{{ a.analisis.riesgo_clinico_financiero.value }}">
+          <header>
+            <span class="alerta-id">{{ a.id }}</span>
+            <span class="triage">T{{ a.triage }}</span>
+            <span class="badge {{ a.analisis.estado_poliza.value }}">{{ a.analisis.estado_poliza.value }}</span>
+          </header>
+          <h3>{{ a.paciente_nombre }}</h3>
+          <p class="meta">CI {{ a.paciente_cedula }} · {{ a.hospital }}</p>
+          <p class="motivo">{{ a.motivo }}</p>
+          <p class="resumen">{{ a.analisis.resumen_ejecutivo }}</p>
+          <div class="grid-2">
+            <div>
+              <h4>Admisiones</h4>
+              <ul>{% for r in a.analisis.recomendaciones_admisiones %}<li>{{ r }}</li>{% endfor %}</ul>
+            </div>
+            <div>
+              <h4>Gestor de casos</h4>
+              <ul>{% for r in a.analisis.recomendaciones_gestor %}<li>{{ r }}</li>{% endfor %}</ul>
+            </div>
+          </div>
+          <footer>
+            <span>Autorización: <strong>{{ a.analisis.autorizacion_sugerida }}</strong></span>
+            <span>{{ a.analisis.modelo_ia }} · {{ a.analisis.tiempo_analisis_ms }} ms</span>
+            <span class="notif">
+              {% if a.notificaciones_enviadas.hospital_admisiones %}✓ Hospital{% else %}○ Hospital{% endif %}
+              {% if a.notificaciones_enviadas.gestor_casos %}✓ Gestor{% else %}○ Gestor{% endif %}
+            </span>
+          </footer>
+        </article>
+        {% else %}
+        <p class="empty">Sin alertas. Use «Simular ingreso» o envíe POST al webhook.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="panel docs">
+      <h2>Webhook para hospitales</h2>
+      <pre><code>POST /api/webhook/ingreso-emergencia
+Content-Type: application/json
+
+{
+  "cedula": "1712345678",
+  "numero_poliza": "POL-EC-2024-001234",
+  "hospital_codigo": "HOSP-QUI-001",
+  "hospital_nombre": "Hospital General de Guayaquil",
+  "motivo_consulta": "Dolor torácico agudo",
+  "triage_nivel": 2
+}</code></pre>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
